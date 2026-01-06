@@ -20,13 +20,21 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: "pnpm"
           registry-url: "https://registry.npmjs.org"
 
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
+      - name: Enable Corepack (pnpm)
+        run: corepack enable
+
+      - name: Activate pnpm
+        run: corepack prepare pnpm@9 --activate
+
+      - name: Cache pnpm store
+        uses: actions/cache@v4
         with:
-          version: 9
+          path: ~/.pnpm-store
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -40,7 +48,7 @@ jobs:
       - name: Test
         run: pnpm test
 
-      - name: Upgrade npm (Trusted Publishing requires newer npm)
+      - name: Upgrade npm (Trusted Publishing)
         run: npm i -g npm@^11.5.1
 
       - name: Publish to npm (Trusted Publisher / OIDC)
