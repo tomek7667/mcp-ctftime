@@ -1,6 +1,6 @@
 {
 	"name": "mcp-ctftime",
-	"version": "1.0.2",
+	"version": "1.0.3",
 	"description": "Model Context Protocol (MCP) server wrapping the public CTFtime API - query CTF events, teams, rankings, and results",
 	"type": "module",
 	"bin": {
